@@ -31,5 +31,10 @@
         android:textSize="20dp"
         android:padding="10dp"
         android:layout_gravity="center"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/reslut_shower"
+        />
 
 </LinearLayout>
