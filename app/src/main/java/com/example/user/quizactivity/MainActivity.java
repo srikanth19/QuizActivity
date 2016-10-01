@@ -12,9 +12,11 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     private static final String KEY_INDEX="index";
+    private static final String KEY_ARRAY="index_array";
     private static final String TAG="QuizActivity";
     private static final String BOOLEAN_CHEATRESULT="cheatresult";
     private static final int REQUEST_CODE_CHEAT=0;
+    private int mCrctAns[]=new int[]{0,0,0};
     private Button mtruebutton;
     private Button mfalsebutton;
     private TextView qustnview;
@@ -41,11 +43,14 @@ public class MainActivity extends AppCompatActivity {
         if(mIsCheater[mCurrentIndex])
         {
          msgresid=R.string.judgment_toast;
+            mCrctAns[0]++;
         }else {
             if (userpressed == answeristrue) {
                 msgresid = R.string.crrct_txt;
+                mCrctAns[1]++;
             } else {
                 msgresid = R.string.wrng_txt;
+                mCrctAns[2]++;
             }
         }
         Toast.makeText(this,msgresid,Toast.LENGTH_SHORT).show();
@@ -80,8 +85,14 @@ public class MainActivity extends AppCompatActivity {
         {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                updatequstn();
+                if(mCurrentIndex<4) {
+                    mCurrentIndex = (mCurrentIndex + 1);
+                    updatequstn();
+                }
+                else{
+                    Intent inm=ResultActivity.resultintent(MainActivity.this,mCrctAns);
+                    startActivity(inm);
+                }
             }
         });
         mCheatButton=(Button)findViewById(R.id.cheat_button);
@@ -97,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState!=null){
             mCurrentIndex=savedInstanceState.getInt(KEY_INDEX,0);
             mIsCheater[mCurrentIndex]=savedInstanceState.getBoolean(BOOLEAN_CHEATRESULT,false);
+            mCrctAns=savedInstanceState.getIntArray(KEY_ARRAY);
         }
         updatequstn();
     }
@@ -106,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
         Log.i(TAG, "onSaveInstancestate");
         savedInstanceState.putInt(KEY_INDEX,mCurrentIndex);
         savedInstanceState.putBoolean(BOOLEAN_CHEATRESULT,mIsCheater[mCurrentIndex]);
+        savedInstanceState.putIntArray(KEY_ARRAY,mCrctAns);
     }
     protected void onActivityResult(int requestCode,int resultCode,Intent data){
         if(resultCode!= Activity.RESULT_OK){

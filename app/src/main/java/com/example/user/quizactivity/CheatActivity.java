@@ -40,12 +40,7 @@ public class CheatActivity extends AppCompatActivity {
         mShowAnswer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mAnswerIsTrue){
-                    mAnswerTextView.setText(R.string.truebutton);
-                }
-                else{
-                    mAnswerTextView.setText(R.string.falsebutton);
-                }
+               answerShower();
                 setAnswerShownResult(true);
                 flag=1;
             }
@@ -56,22 +51,13 @@ public class CheatActivity extends AppCompatActivity {
             flag=savedInstanceState.getInt(KEY_FLAG);
         }
         if(flag==1){
-            if(mAnswerIsTrue){
-                mAnswerTextView.setText(R.string.truebutton);
-            }
-            else{
-                mAnswerTextView.setText(R.string.falsebutton);
-            }
-            Intent data=new Intent();
-            data.putExtra(EXTRA_ANSWER_SHOWN,mAnswerIsTrueIns);
-            setResult(RESULT_OK, data);
+           answerShower();
+            intentcreater();
         }
     }
     private void setAnswerShownResult(boolean isAnswerShow){
         mAnswerIsTrueIns=isAnswerShow;
-        Intent data=new Intent();
-        data.putExtra(EXTRA_ANSWER_SHOWN,mAnswerIsTrueIns);
-        setResult(RESULT_OK, data);
+        intentcreater();
     }
 
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -79,5 +65,18 @@ public class CheatActivity extends AppCompatActivity {
         Log.i(TAG_C, "onSaveInstancestate");
         savedInstanceState.putInt(KEY_FLAG,flag);
         savedInstanceState.putBoolean(KEY_BOOLEAN, mAnswerIsTrueIns);
+    }
+    private void answerShower(){
+        if(mAnswerIsTrue){
+            mAnswerTextView.setText(R.string.truebutton);
+        }
+        else{
+            mAnswerTextView.setText(R.string.falsebutton);
+        }
+    }
+    private void intentcreater(){
+        Intent data=new Intent();
+        data.putExtra(EXTRA_ANSWER_SHOWN,mAnswerIsTrueIns);
+        setResult(RESULT_OK, data);
     }
 }
